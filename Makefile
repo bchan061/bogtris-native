@@ -1,12 +1,12 @@
 CC := g++
 PROJECT_NAME := bogtris
 
-LIBRARIES := SDL2
+LIBRARIES := SDL2 SDL2_image
 LIBRARIES_FLAGS = $(foreach lib, $(LIBRARIES), -l$(lib) )
 
 COMPILER_FLAGS := -Wall
 
-OBJS = Bogtris.o Window.o
+OBJS = Bogtris.o Window.o Game.o Screen.o MainGameScreen.o
 OBJS_FILES = $(foreach obj, $(OBJS), ./obj/$(obj) )
 
 all: $(OBJS)
