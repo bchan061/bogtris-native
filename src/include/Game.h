@@ -13,6 +13,7 @@ class Game {
         float elapsedDt;
 
         Screen* currentScreen;
+        SDL_Renderer* renderer;
     public:
         /**
          * Initializes an empty game.
@@ -44,6 +45,17 @@ class Game {
          * @param newScreen a pointer to a new screen
          */
         void changeScreen(Screen* newScreen);
+
+        /**
+         * Attaches a SDL_Renderer to the game.
+         * @param newRenderer the new renderer
+         */
+        void attachRenderer(SDL_Renderer* newRenderer) { this->renderer = newRenderer; }
+
+        /**
+         * Returns a SDL_Renderer that (could have been) previously set.
+         */
+        SDL_Renderer* getRenderer() { return this->renderer; }
 
         /**
          * Destroys the game.

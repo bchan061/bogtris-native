@@ -40,5 +40,6 @@ void Game::changeScreen(Screen* newScreen) {
 }
 
 Game::~Game() {
-
+    delete this->currentScreen;
+    this->currentScreen = NULL;
 }

@@ -6,7 +6,7 @@ LIBRARIES_FLAGS = $(foreach lib, $(LIBRARIES), -l$(lib) )
 
 COMPILER_FLAGS := -Wall
 
-OBJS = Bogtris.o Window.o Game.o Screen.o MainGameScreen.o
+OBJS = Bogtris.o Window.o Game.o Screen.o MainGameScreen.o Board.o Block.o
 OBJS_FILES = $(foreach obj, $(OBJS), ./obj/$(obj) )
 
 all: $(OBJS)

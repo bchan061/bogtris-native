@@ -24,6 +24,16 @@ class Screen {
          * @param alpha the interpolaton factor between the two frames
          */
         virtual void draw(float alpha) = 0;
+
+        /**
+         * Returns the game that was set.
+         */
+        Game* getGame() { return game; }
+
+        /**
+         * Destroys the current screen.
+         */
+        virtual ~Screen();
 };
 
 #endif

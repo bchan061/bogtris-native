@@ -3,3 +3,7 @@
 Screen::Screen(Game* currentGame) {
     this->game = currentGame;
 }
+
+Screen::~Screen() {
+    
+}

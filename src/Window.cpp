@@ -56,23 +56,25 @@ void Window::run() {
         }
 
         /* Clear the window surface to black */
-        const uint32_t BLACK_COLOR = SDL_MapRGB(this->windowSurface->format, 0, 0, 0);
-        SDL_FillRect(this->windowSurface, NULL, BLACK_COLOR);
-        if (this->game) {
-            this->game->update(SDL_GetTicks());
-        }
-        SDL_UpdateWindowSurface(this->window);
+        SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 255);
+        SDL_RenderClear(this->renderer);
+        this->game->update(SDL_GetTicks());
+        SDL_RenderPresent(this->renderer);
     }
 }
 
 void Window::attachGame(Game* newGame) {
     this->game = newGame;
+    this->game->attachRenderer(this->renderer);
 }
 
 Window::~Window() {
-    if (this->window != NULL) {
+    if (this->window) {
         SDL_DestroyWindow(this->window);
     }
+
+    delete this->game;
+    this->game = NULL;
 
     SDL_Quit();
 }
