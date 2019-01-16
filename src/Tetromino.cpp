@@ -1,57 +1,84 @@
 #include "include/Tetromino.h"
 
-Tetromino::Tetromino(std::string newName, uint32_t newColor, bool** newShape, int newShapeSize) {
+#include <iostream>
+
+Tetromino::Tetromino() {
+    this->name = "Blank";
+    this->color = 0xFF00FF;
+    this->shapeSize = 1;
+    this->currentShapeIndex = 0;
+    this->rotationBoxes = new bool*[Tetromino::AMOUNT_OF_ROTATION_BOXES];
+
+    this->originalShape = new bool[1];
+    this->originalShape[0] = false;
+
+    this->generateRotationBoxes();
+}
+
+Tetromino::Tetromino(std::string newName, uint32_t newColor, bool* newShape, int newShapeSize) {
     this->name = newName;
     this->color = newColor;
     this->shapeSize = newShapeSize;
     this->currentShapeIndex = 0;
 
-    this->rotationBoxes = new bool**[Tetromino::AMOUNT_OF_ROTATION_BOXES];
+    this->rotationBoxes = new bool*[Tetromino::AMOUNT_OF_ROTATION_BOXES];
 
     /* Clone newShape to this->originalShape */
-    this->originalShape = new bool*[newShapeSize];
-    for (int y = 0; y < newShapeSize; y++) {
-        this->originalShape[y] = new bool[newShapeSize];
-        for (int x = 0; x < newShapeSize; x++) {
-            this->originalShape[y][x] = originalShape[y][x];
-        }
+    this->originalShape = new bool[newShapeSize];
+    for (int i = 0; i < this->shapeSize * this->shapeSize; i++) {
+        this->originalShape[i] = newShape[i];
     }
 
     this->generateRotationBoxes();
-    this->logBox();
+}
+
+/**
+ * Helper method to get a 1D index from a 2D coordinate.
+ */
+int get1DIndexFrom2DIndex(int x, int y, int width) {
+    return y * width + x;
 }
 
 void Tetromino::generateRotationBoxes() {
+    /*
+     * The way that these boxes are generated are inefficient;
+     * they are borrowed from an existing method that used 2D arrays.
+     */
+
     /* First shape: the original shape */
     this->rotationBoxes[0] = this->originalShape;
 
     /* Second shape: the rotated-right shape */
-    bool** newShape = new bool*[this->shapeSize];
+    bool* newShape = new bool[this->shapeSize];
     for (int y = 0; y < this->shapeSize; y++) {
-        newShape[y] = new bool[this->shapeSize];
         for (int x = 0; x < this->shapeSize; x++) {
-            newShape[y][x] = this->originalShape[this->shapeSize - 1 - x][y];
+            int index = get1DIndexFrom2DIndex(x, y, this->shapeSize);
+            int newIndex = get1DIndexFrom2DIndex(y, this->shapeSize - 1 - x, this->shapeSize);
+            newShape[index] = this->originalShape[newIndex];
         }
     }
 
     this->rotationBoxes[1] = newShape;
     
     /* Third shape: the rotated-180 shape */
-    bool** newShape2 = new bool*[this->shapeSize];
+    bool* newShape2 = new bool[this->shapeSize];
     for (int y = 0; y < this->shapeSize; y++) {
-        newShape2[y] = new bool[this->shapeSize];
         for (int x = 0; x < this->shapeSize; x++) {
-            newShape2[y][x] = this->originalShape[this->shapeSize - 1 - y][this->shapeSize - 1 - x];
+            int index = get1DIndexFrom2DIndex(x, y, this->shapeSize);
+            int newIndex = get1DIndexFrom2DIndex(this->shapeSize - 1 - x, this->shapeSize - 1 - y, this->shapeSize);
+            newShape2[index] = this->originalShape[newIndex];
         }
     }
     this->rotationBoxes[2] = newShape2;
 
     /* Fourth shape: the rotated-left shape */
-    bool** newShape3 = new bool*[this->shapeSize];
+    bool* newShape3 = new bool[this->shapeSize];
     for (int y = 0; y < this->shapeSize; y++) {
-        newShape3[y] = new bool[this->shapeSize];
         for (int x = 0; x < this->shapeSize; x++) {
-            newShape3[y][x] = this->originalShape[x][this->shapeSize - 1 - y];
+            int index = get1DIndexFrom2DIndex(x, y, this->shapeSize);
+            int newIndex = get1DIndexFrom2DIndex(this->shapeSize - 1 - y, x, this->shapeSize);
+            newShape3[index] = this->originalShape[newIndex];
+            
         }
     }
     this->rotationBoxes[3] = newShape3;
@@ -71,30 +98,32 @@ void Tetromino::rotateRight() {
     this->currentShapeIndex = (this->currentShapeIndex + 1) % Tetromino::AMOUNT_OF_ROTATION_BOXES;
 }
 
-bool** Tetromino::getRotationBox() {
+bool* Tetromino::getRotationBox() {
     return this->rotationBoxes[this->currentShapeIndex];
 }
 
 void Tetromino::logBox() {
-    bool** currentRotationBox = this->getRotationBox();
-    for (int y = 0; y < this->shapeSize; y++) {
-        for (int x = 0; x < this->shapeSize; x++) {
-            if (currentRotationBox[y][x]) {
-                printf("X");
-            } else {
-                printf("O");
-            }
+    bool* currentRotationBox = this->getRotationBox();
+    for (int i = 0; i < this->shapeSize * this->shapeSize; i++) {
+        std::cout << currentRotationBox[i];
+        if ((i + 1) % this->shapeSize == 0) {
+            std::cout << std::endl;
         }
-        printf("\n");
     }
 }
 
+void Tetromino::logAllBoxes() {
+    for (int i = 0; i < 4; i++) {
+        this->currentShapeIndex = i;
+        std::cout << "Rotation box " << (i + 1) << " for " << this->name << ": " << std::endl;
+        this->logBox();
+    }
+    this->currentShapeIndex = 0;
+}
+
 Tetromino::~Tetromino() {
-    /* Remove the generated rotation boxes; but not the original */
-    for (int i = 1; i < Tetromino::AMOUNT_OF_ROTATION_BOXES; i++) {
-        for (int y = 0; y < this->shapeSize; y++) {
-            delete[] this->rotationBoxes[i][y];
-        }
+    /* This also deletes this->originalShape */
+    for (int i = 0; i < Tetromino::AMOUNT_OF_ROTATION_BOXES; i++) {
         delete[] this->rotationBoxes[i];
     }
     delete[] this->rotationBoxes;

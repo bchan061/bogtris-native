@@ -1,6 +1,6 @@
 #include "include/MainGameScreen.h"
 #include "include/Game.h"
-#include "include/Tetromino.h"
+#include "include/Tetrominoes.h"
 #include "include/Constants.h"
 
 #include <iostream>
@@ -9,23 +9,15 @@ MainGameScreen::MainGameScreen(Game* currentGame) : Screen(currentGame) {
     this->board = new Board(10, 25, 24);
     this->board->fillRandom();
 
-    bool** oBox = new bool*[2];
-    for (int i = 0; i < 2; i++) {
-        oBox[i] = new bool[2];
-        oBox[i][0] = true;
-        oBox[i][1] = true;
+    Tetrominoes tetrominoes = Tetrominoes();
+    std::vector<Tetromino*> tetrominoArray = tetrominoes.getAllTetrominoes();
+    for (std::vector<Tetromino*>::iterator it = tetrominoArray.begin(); it != tetrominoArray.end(); it++) {
+        (*it)->logAllBoxes();
     }
-    Tetromino oTetrominoTest = Tetromino(
-        "O",
-        Constants::Colors::YELLOW,
-        oBox,
-        2
-    );
-    delete oBox;
 }
 
 void MainGameScreen::update(float dt) {
-
+    
 }
 
 void MainGameScreen::draw(float alpha) {

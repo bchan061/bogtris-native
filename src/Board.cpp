@@ -4,20 +4,30 @@ Board::Board(int width, int height, int size) {
     this->boardWidth = width;
     this->boardHeight = height;
     this->blockSize = size;
-    this->blockArray = new Block*[this->boardHeight];
+    this->rowArray = new Row[this->boardHeight];
     for (int y = 0; y < this->boardHeight; y++) {
-        this->blockArray[y] = new Block[this->boardWidth];
+        this->rowArray[y].setWidth(this->boardWidth);
     }
+}
+
+Block* Board::getBlock(int x, int y) {
+    if (y < 0 || y >= this->boardHeight) {
+        return NULL;
+    }
+
+    return this->rowArray[y].getBlock(x);
 }
 
 void Board::fillRandom() {
     for (int y = 0; y < this->boardHeight; y++) {
         for (int x = 0; x < this->boardWidth; x++) {
-            Block* block = &(this->blockArray[y][x]);
-            block->reset();
+            Block* block = this->getBlock(x, y);
+            if (block) {
+                block->reset();
 
-            /* Set a random color. */
-            block->set(rand() % 0xFFFFFF);
+                /* Set a random color. */
+                block->set(rand() % 0xFFFFFF);
+            }
         }
     }
 }
@@ -28,20 +38,16 @@ void Board::drawBoard(SDL_Renderer* renderer, int offsetX, int offsetY) {
     blockRect.h = this->blockSize;
     for (int y = this->hiddenTop; y < this->boardHeight; y++) {
         for (int x = 0; x < this->boardWidth; x++) {
-            Block block = this->blockArray[y][x];
+            Block* block = this->getBlock(x, y);
             blockRect.x = offsetX + x * this->blockSize;
             blockRect.y = offsetY + (y - this->hiddenTop) * this->blockSize;
 
-            SDL_SetRenderDrawColor(renderer, block.getRed(), block.getGreen(), block.getBlue(), 255);
+            SDL_SetRenderDrawColor(renderer, block->getRed(), block->getGreen(), block->getBlue(), 255);
             SDL_RenderFillRect(renderer, &blockRect);
         }
     }
 }
 
 Board::~Board() {
-    for (int y = 0; y < this->boardHeight; y++) {
-        delete[] this->blockArray[y];
-    }
-
-    delete[] this->blockArray;
+    delete[] this->rowArray;
 }

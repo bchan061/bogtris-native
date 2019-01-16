@@ -2,11 +2,12 @@
 #define BOARD_H
 
 #include <SDL2/SDL.h>
+#include "Row.h"
 #include "Block.h"
 
 class Board {
     private:
-        Block** blockArray;
+        Row* rowArray;
         int boardWidth;
         int boardHeight;
         int blockSize;
@@ -21,6 +22,12 @@ class Board {
          * @param blockSize the block size
          */
         Board(int width, int height, int size);
+
+        /**
+         * Gets a pointer to the block at position (x, y) [where (0, 0) is the top-left].
+         * Returns NULL if no such block exists.
+         */
+        Block* getBlock(int x, int y);
 
         /**
          * Fills the board with active blocks with random colors.

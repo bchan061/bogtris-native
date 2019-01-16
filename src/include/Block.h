@@ -1,8 +1,6 @@
 #ifndef BLOCK_H
 #define BLOCK_H
 
-#endif
-
 #include <SDL2/SDL.h>
 
 class Block {
@@ -58,3 +56,5 @@ class Block {
          */
         void set(uint32_t newColor);
 };
+
+#endif

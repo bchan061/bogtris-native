@@ -10,22 +10,28 @@ class Tetromino {
 
         std::string name;
         uint32_t color;
-        bool** originalShape;
+        /* 1D arrays define shapes. Conscious decision to make initializing shape arrays easier */
+        bool* originalShape;
         int shapeSize;
 
         int currentShapeIndex;
 
-        /* An array of 2D arrays defining shapes */
-        bool*** rotationBoxes;
+        /* An array of 1D arrays defining shapes */
+        bool** rotationBoxes;
     public:
+        /**
+         * Initializes a blank tetromino.
+         */
+        Tetromino();
+
         /**
          * Initializes a tetromino.
          * @param newName the name of the tetromino
          * @param newColor the color of the tetromino (0xRRGGBB)
-         * @param newShape a 2D array containing the original shape
+         * @param newShape a psuedo-2D array containing the original shape
          * @param newShapeSize the length of the rotation box
          */
-        Tetromino(std::string newName, uint32_t newColor, bool** newShape, int newShapeSize);
+        Tetromino(std::string newName, uint32_t newColor, bool* newShape, int newShapeSize);
 
         /**
          * Generates rotation boxes for each of the four rotations.
@@ -50,13 +56,19 @@ class Tetromino {
         /**
          * Returns the current rotation box.
          */
-        bool** getRotationBox();
+        bool* getRotationBox();
 
         /**
          * Logs the current rotation box.
          * For debugging purposes.
          */
         void logBox();
+
+        /**
+         * Logs all rotation boxes.
+         * For debugging purposes.
+         */
+        void logAllBoxes();
 
         /**
          * Destroys the tetromino.
