@@ -10,6 +10,9 @@ class Board {
         int boardWidth;
         int boardHeight;
         int blockSize;
+
+        /* Hide first five rows */
+        int hiddenTop = 5;
     public:
         /**
          * Initializes a board with a set width and height.

@@ -69,6 +69,10 @@ void Window::attachGame(Game* newGame) {
 }
 
 Window::~Window() {
+    if (this->renderer) {
+        SDL_DestroyRenderer(this->renderer);
+    }
+
     if (this->window) {
         SDL_DestroyWindow(this->window);
     }
