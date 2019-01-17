@@ -44,6 +44,26 @@ class Board {
         void drawBoard(SDL_Renderer* renderer, int offsetX, int offsetY);
 
         /**
+         * Returns the size of a block in pixels.
+         */
+        int getBlockSize() { return this->blockSize; }
+
+        /**
+         * Returns the width of the board.
+         */
+        int getBoardWidth() { return this->boardWidth; }
+
+        /**
+         * Returns the height of the board (including the obscured rows)
+         */
+        int getBoardHeight() { return this->boardHeight; }
+
+        /**
+         * Returns the amount of rows that are hidden at the top.
+         */
+        int getObscuredTop() { return this->hiddenTop; }
+
+        /**
          * Destroys the board.
          */
         ~Board();

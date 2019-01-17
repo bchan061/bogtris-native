@@ -9,6 +9,8 @@ class Game {
     private:
         uint32_t previousTick;
         bool firstUpdate;
+        /* If this is true, sleep in between frames */
+        bool limitFramerate;
 
         float elapsedDt;
 

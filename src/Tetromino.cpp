@@ -32,10 +32,7 @@ Tetromino::Tetromino(std::string newName, uint32_t newColor, bool* newShape, int
     this->generateRotationBoxes();
 }
 
-/**
- * Helper method to get a 1D index from a 2D coordinate.
- */
-int get1DIndexFrom2DIndex(int x, int y, int width) {
+int Tetromino::get1DIndexFrom2DIndex(int x, int y, int width) {
     return y * width + x;
 }
 

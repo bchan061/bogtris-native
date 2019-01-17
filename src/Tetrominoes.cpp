@@ -53,7 +53,7 @@ Tetrominoes::Tetrominoes() {
         0, 1, 1,
         0, 0, 0
     };
-    this->createTetromino("Z", Constants::Colors::ORANGE, zBox, 3);
+    this->createTetromino("Z", Constants::Colors::RED, zBox, 3);
 }
 
 void Tetrominoes::createTetromino(std::string name, uint32_t color, bool* shape, int shapeSize) {

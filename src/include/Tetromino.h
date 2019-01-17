@@ -59,6 +59,22 @@ class Tetromino {
         bool* getRotationBox();
 
         /**
+         * Returns the length of the rotation box.
+         */
+        int getShapeSize() { return this->shapeSize; }
+
+        /**
+         * Returns the color of the tetromino.
+         * The color is packed as 0x00RRGGBB.
+         */
+        uint32_t getColor() { return this->color; }
+
+        /**
+         * Helper method to get a 1D index from a 2D coordinate.
+         */
+        static int get1DIndexFrom2DIndex(int x, int y, int width);
+
+        /**
          * Logs the current rotation box.
          * For debugging purposes.
          */
