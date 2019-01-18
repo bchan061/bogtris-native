@@ -57,12 +57,9 @@ Tetrominoes::Tetrominoes() {
 }
 
 void Tetrominoes::createTetromino(std::string name, uint32_t color, bool* shape, int shapeSize) {
-    Tetromino* tetromino = new Tetromino(name, color, shape, shapeSize);
-    this->tetrominoArray.push_back(tetromino);
+    this->tetrominoArray.push_back(Tetromino(name, color, shape, shapeSize));
 }
 
 Tetrominoes::~Tetrominoes() {
-    for(std::vector<Tetromino*>::iterator it = this->tetrominoArray.begin(); it != this->tetrominoArray.end(); it++) {
-        delete *it;
-    }
+    
 }

@@ -4,9 +4,11 @@ Board::Board(int width, int height, int size) {
     this->boardWidth = width;
     this->boardHeight = height;
     this->blockSize = size;
-    this->rowArray = new Row[this->boardHeight];
+
+    this->rowVector.reserve(this->boardHeight);
     for (int y = 0; y < this->boardHeight; y++) {
-        this->rowArray[y].setWidth(this->boardWidth);
+        Row row = Row(this->boardWidth);
+        this->rowVector.push_back(row);
     }
 }
 
@@ -15,7 +17,7 @@ Block* Board::getBlock(int x, int y) {
         return NULL;
     }
 
-    return this->rowArray[y].getBlock(x);
+    return this->rowVector.at(y).getBlock(x);
 }
 
 void Board::fillRandom() {
@@ -49,5 +51,5 @@ void Board::drawBoard(SDL_Renderer* renderer, int offsetX, int offsetY) {
 }
 
 Board::~Board() {
-    delete[] this->rowArray;
+
 }

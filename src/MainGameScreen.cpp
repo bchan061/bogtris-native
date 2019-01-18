@@ -5,15 +5,9 @@
 
 #include <iostream>
 
-MainGameScreen::MainGameScreen(Game* currentGame) : Screen(currentGame) {
+MainGameScreen::MainGameScreen(Game* currentGame) : Screen(currentGame), tetrominoes() {
     this->board = new Board(10, 25, 24);
     this->board->fillRandom();
-
-    this->tetrominoes = new Tetrominoes();
-    std::vector<Tetromino*> tetrominoArray = this->tetrominoes->getAllTetrominoes();
-    for (std::vector<Tetromino*>::iterator it = tetrominoArray.begin(); it != tetrominoArray.end(); it++) {
-        (*it)->logAllBoxes();
-    }
 }
 
 void MainGameScreen::update(float dt) {
@@ -22,31 +16,31 @@ void MainGameScreen::update(float dt) {
 
 void MainGameScreen::draw(float alpha) {
     this->board->drawBoard(this->game->getRenderer(), 10, 10);
-    this->drawTetromino(this->tetrominoes->getAllTetrominoes().at(0), 500, 50);
-    this->drawTetromino(this->tetrominoes->getAllTetrominoes().at(1), 500, 100);
-    this->drawTetromino(this->tetrominoes->getAllTetrominoes().at(2), 500, 150);
-    this->drawTetromino(this->tetrominoes->getAllTetrominoes().at(3), 500, 200);
-    this->drawTetromino(this->tetrominoes->getAllTetrominoes().at(4), 500, 250);
-    this->drawTetromino(this->tetrominoes->getAllTetrominoes().at(5), 500, 300);
-    this->drawTetromino(this->tetrominoes->getAllTetrominoes().at(6), 500, 350);
+    this->drawTetromino(this->tetrominoes.getAllTetrominoes().at(0), 500, 50);
+    this->drawTetromino(this->tetrominoes.getAllTetrominoes().at(1), 500, 100);
+    this->drawTetromino(this->tetrominoes.getAllTetrominoes().at(2), 500, 150);
+    this->drawTetromino(this->tetrominoes.getAllTetrominoes().at(3), 500, 200);
+    this->drawTetromino(this->tetrominoes.getAllTetrominoes().at(4), 500, 250);
+    this->drawTetromino(this->tetrominoes.getAllTetrominoes().at(5), 500, 300);
+    this->drawTetromino(this->tetrominoes.getAllTetrominoes().at(6), 500, 350);
 }
 
-void MainGameScreen::drawTetromino(Tetromino* tetromino, int offsetX, int offsetY) {
+void MainGameScreen::drawTetromino(Tetromino tetromino, int offsetX, int offsetY) {
     SDL_Renderer* renderer = this->getGame()->getRenderer();
     SDL_Rect rect;
     rect.w = this->board->getBlockSize();
     rect.h = this->board->getBlockSize();
 
-    uint32_t color = tetromino->getColor();
+    uint32_t color = tetromino.getColor();
     uint8_t r = (color >> 16) & 0xFF;
     uint8_t g = (color >> 8) & 0xFF;
     uint8_t b = (color) & 0xFF;
 
-    bool* rotationBox = tetromino->getRotationBox();
-    for (int i = 0; i < tetromino->getShapeSize() * tetromino->getShapeSize(); i++) {
-        if (rotationBox[i]) {
-            int x = i % tetromino->getShapeSize();
-            int y = i / tetromino->getShapeSize();
+    std::vector<bool> rotationBox = tetromino.getRotationBox();
+    for (int i = 0; i < tetromino.getShapeSize() * tetromino.getShapeSize(); i++) {
+        if (rotationBox.at(i)) {
+            int x = i % tetromino.getShapeSize();
+            int y = i / tetromino.getShapeSize();
             rect.x = offsetX + x * this->board->getBlockSize();
             rect.y = offsetY + y * this->board->getBlockSize();
 

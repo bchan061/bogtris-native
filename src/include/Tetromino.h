@@ -10,14 +10,14 @@ class Tetromino {
 
         std::string name;
         uint32_t color;
-        /* 1D arrays define shapes. Conscious decision to make initializing shape arrays easier */
-        bool* originalShape;
         int shapeSize;
 
         int currentShapeIndex;
 
-        /* An array of 1D arrays defining shapes */
-        bool** rotationBoxes;
+        /* 1D arrays define shapes. Conscious decision to make initializing shape arrays easier */
+
+        /* This is a vector holding a 1D array of the shape */
+        std::vector<std::vector<bool>> rotationBoxes;
     public:
         /**
          * Initializes a blank tetromino.
@@ -56,7 +56,7 @@ class Tetromino {
         /**
          * Returns the current rotation box.
          */
-        bool* getRotationBox();
+        std::vector<bool> getRotationBox();
 
         /**
          * Returns the length of the rotation box.

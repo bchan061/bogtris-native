@@ -2,7 +2,6 @@
 
 Row::Row() {
     this->width = 0;
-    this->blocks = NULL;
 }
 
 Row::Row(int width) {
@@ -13,20 +12,18 @@ Block* Row::getBlock(int x) {
     if (x < 0 || x >= this->width) {
         return NULL;
     }
-    return &(this->blocks[x]);
+    return &(this->blocks.at(x));
 }
 
 void Row::setWidth(int newWidth) {
     this->width = newWidth;
-    if (this->blocks) {
-        delete[] this->blocks;
+    this->blocks.clear();
+    this->blocks.reserve(newWidth);
+    for (int i = 0; i < this->width; i++) {
+        this->blocks.push_back(Block());
     }
-
-    this->blocks = new Block[this->width];
 }
 
 Row::~Row() {
-    if (this->blocks) {
-        delete[] this->blocks;
-    }
+    
 }

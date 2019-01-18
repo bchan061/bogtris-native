@@ -3,9 +3,11 @@
 
 #include "Block.h"
 
+#include <vector>
+
 class Row {
     private:
-        Block* blocks;
+        std::vector<Block> blocks;
         int width;
     public:
         /**
@@ -26,7 +28,7 @@ class Row {
         /**
          * Returns an array of blocks representing the row.
          */
-        Block* getBlocks() { return blocks; }
+        std::vector<Block> getBlocks() { return blocks; }
 
         /**
          * Returns the width of the row.

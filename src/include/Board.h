@@ -5,9 +5,11 @@
 #include "Row.h"
 #include "Block.h"
 
+#include <vector>
+
 class Board {
     private:
-        Row* rowArray;
+        std::vector<Row> rowVector;
         int boardWidth;
         int boardHeight;
         int blockSize;
