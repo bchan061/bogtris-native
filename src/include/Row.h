@@ -26,9 +26,9 @@ class Row {
         void setWidth(int newWidth);
 
         /**
-         * Returns an array of blocks representing the row.
+         * Returns a pointer to a vector of blocks representing the row.
          */
-        std::vector<Block> getBlocks() { return blocks; }
+        std::vector<Block>* getBlocks() { return &(this->blocks); }
 
         /**
          * Returns the width of the row.

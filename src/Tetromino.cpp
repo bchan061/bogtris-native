@@ -7,7 +7,10 @@ Tetromino::Tetromino() {
     this->color = 0xFF00FF;
     this->shapeSize = 1;
     this->currentShapeIndex = 0;
-    this->rotationBoxes.reserve(Tetromino::AMOUNT_OF_ROTATION_BOXES);
+
+    /* Create a one tile shape */
+    std::vector<bool> original{ true };
+    this->rotationBoxes.push_back(original);
 
     this->generateRotationBoxes();
 }
@@ -17,7 +20,6 @@ Tetromino::Tetromino(std::string newName, uint32_t newColor, bool* newShape, int
     this->color = newColor;
     this->shapeSize = newShapeSize;
     this->currentShapeIndex = 0;
-    this->rotationBoxes.reserve(Tetromino::AMOUNT_OF_ROTATION_BOXES);
 
     /* Clone newShape to the first rotation box */
     std::vector<bool> original;
@@ -38,11 +40,8 @@ void Tetromino::generateRotationBoxes() {
      * The way that these boxes are generated are inefficient;
      * they are borrowed from an existing method that used 2D arrays.
      */
-    /* First shape: the original shape. Create if it doesn't already exist */
-    if(this->rotationBoxes.size() < 1) {
-        std::vector<bool> tile{ true };
-        this->rotationBoxes.push_back(tile);
-    }
+    
+    /* First shape: the original shape. Should already be added. */
 
     /* For convenience */
     std::vector<bool>* originalShape = &(this->rotationBoxes.at(0));
@@ -101,7 +100,7 @@ void Tetromino::rotateRight() {
 }
 
 std::vector<bool> Tetromino::getRotationBox() {
-    return this->rotationBoxes[this->currentShapeIndex];
+    return this->rotationBoxes.at(this->currentShapeIndex);
 }
 
 void Tetromino::logBox() {

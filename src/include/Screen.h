@@ -4,6 +4,8 @@
 /* Forward declare Game */
 class Game;
 
+#include <SDL2/SDL.h>
+
 class Screen {
     protected:
         Game* game;
@@ -24,6 +26,12 @@ class Screen {
          * @param alpha the interpolaton factor between the two frames
          */
         virtual void draw(float alpha) = 0;
+
+        /**
+         * Handles a keypress.
+         * @param keycode the SDL_Keycode representing a key
+         */
+        virtual void handleKeypress(SDL_Keycode keycode) = 0;
 
         /**
          * Returns the game that was set.

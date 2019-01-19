@@ -29,6 +29,11 @@ class Game {
         void update(uint32_t currentTick);
 
         /**
+         * Handles a keypress.
+         */
+        void handleKeypress(SDL_Keycode keycode);
+
+        /**
          * Attaches a new screen into the game.
          * Does not destroy any previous screens attached.
          * @param newScreen a pointer to a new screen

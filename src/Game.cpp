@@ -41,6 +41,10 @@ void Game::update(uint32_t currentTick) {
     }
 }
 
+void Game::handleKeypress(SDL_Keycode keycode) {
+    this->currentScreen->handleKeypress(keycode);
+}
+
 void Game::attachScreen(Screen* newScreen) {
     this->currentScreen = newScreen;
 }

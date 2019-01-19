@@ -24,7 +24,7 @@ class Tetrominoes {
          * Get all the tetrominoes.
          * Organized into a vector.
          */
-        std::vector<Tetromino> getAllTetrominoes() { return this->tetrominoArray; }
+        std::vector<Tetromino>* getAllTetrominoes() { return &this->tetrominoArray; }
 
         /**
          * Destroys the tetrominoes.

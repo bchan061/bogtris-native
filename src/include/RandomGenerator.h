@@ -9,19 +9,25 @@ class RandomGenerator {
     private:
         std::vector<Tetromino*> tetrominoVector;
 
-        int nextQueueLength;
+        unsigned int nextQueueLength;
 
         std::queue<Tetromino*> next;
         std::queue<Tetromino*> bag;
     public:
         /**
+         * Initializes a blank random generator.
+         * It will need to be initialized with RandomGenerator::initWithTetrominoes(Tetrominoes*) afterward.
+         */
+        RandomGenerator();
+
+        /**
          * Initializes a random generator.
          * @param tetrominoes a pointer to a Tetrominoes object
          */
-        RandomGenerator(Tetrominoes* tetrominoes);
+        void initWithTetrominoes(Tetrominoes* tetrominoes);
 
         /**
-         * Shuffles the vector of tetrominoes via Fisher-Yates.
+         * Shuffles the vector of tetrominoes.
          */
         void shuffleTetrominoVector();
 
@@ -40,6 +46,11 @@ class RandomGenerator {
          * If the bag is empty, also creates a new bag.
          */
         void fillQueueWithBag();
+
+        /**
+         * Pop the next tetromino from the queue.
+         */
+        Tetromino* getNextTetromino();
 };
 
 #endif

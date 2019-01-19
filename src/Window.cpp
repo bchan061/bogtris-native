@@ -34,7 +34,7 @@ Window::Window(std::string title, int width, int height) {
 }
 
 void Window::handleKeyPress(SDL_Keycode keycode) {
-    
+    this->game->handleKeypress(keycode);
 }
 
 void Window::run() {
@@ -48,7 +48,9 @@ void Window::run() {
                     this->running = false;
                     break;
                 case SDL_KEYDOWN:
-                    this->handleKeyPress(e.key.keysym.sym);
+                    if (!e.key.repeat) {
+                        this->handleKeyPress(e.key.keysym.sym);
+                    }
                     break;
                 default:
                     break;
