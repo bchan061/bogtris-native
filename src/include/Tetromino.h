@@ -21,6 +21,7 @@ class Tetromino {
         std::vector<std::vector<std::vector<int>>> offsets;
     public:
         static int const AMOUNT_OF_ROTATION_BOXES = 4;
+        static int const AMOUNT_OF_KICKS = 5;
 
         /**
          * Initializes a blank tetromino.

@@ -76,6 +76,12 @@ class Board {
         void renderTetromino(Tetromino& tetromino, SDL_Point& location);
 
         /**
+         * Checks for any line clears.
+         * If there are, shifts the rows down.
+         */
+        int checkLineClears();
+
+        /**
          * Destroys the board.
          */
         ~Board();

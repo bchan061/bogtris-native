@@ -51,13 +51,10 @@ int TetrominoOperations::tryRotate(Board& board, Tetromino& tetromino, SDL_Point
      */
     std::vector<std::vector<int>> offsetA = tetromino.getOffsets()->at(tetromino.getShapeIndex());
     std::vector<std::vector<int>> offsetB = tetromino.getOffsets()->at(nextRotationState);
-    for (unsigned int i = 0; i < tetromino.getOffsets()->size(); i++) {
+    for (unsigned int i = 0; i < Tetromino::AMOUNT_OF_KICKS; i++) {
         std::vector<int> kickA = offsetA.at(i);
         std::vector<int> kickB = offsetB.at(i);
         std::vector<int> kick = { kickA.at(0) - kickB.at(0), kickA.at(1) - kickB.at(1) };
-
-        /* Flip the y-values for the kick. */
-        kick.at(1) *= -1;
 
         if (clockwise) {
             tetromino.rotateRight();
@@ -67,7 +64,8 @@ int TetrominoOperations::tryRotate(Board& board, Tetromino& tetromino, SDL_Point
 
         SDL_Point newPossibleLocation = {
             currentLocation.x + kick.at(0),
-            currentLocation.y + kick.at(1)
+            /* Flip the y-values of the kick. */
+            currentLocation.y - kick.at(1)
         };
 
         if (
@@ -79,7 +77,7 @@ int TetrominoOperations::tryRotate(Board& board, Tetromino& tetromino, SDL_Point
             currentLocation = newPossibleLocation;
             return i;
         } else {
-            /* Reverse the ortation. */
+            /* Reverse the rotation. */
             if (clockwise) {
                 tetromino.rotateLeft();
             } else {

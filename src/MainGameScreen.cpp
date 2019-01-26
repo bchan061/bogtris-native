@@ -14,21 +14,38 @@ MainGameScreen::MainGameScreen(Game* currentGame) :
         Constants::SCREEN_HEIGHT / 2 -
             ((this->board.getBoardHeight() - this->board.getObscuredTop()) * this->board.getBlockSize()) / 2
     };
-
-    for (std::vector<Tetromino>::iterator it = this->tetrominoes.getAllTetrominoes()->begin(); it != this->tetrominoes.getAllTetrominoes()->end(); it++) {
-        (*it).logAllBoxes();
-    }
+    this->heldTetromino = NULL;
 
     this->getNextTetromino();
 }
 
 void MainGameScreen::getNextTetromino() {
-    this->cur = this->randomGenerator.getNextTetromino();
+    this->board.checkLineClears();
+    this->hasHeld = false;
+    this->spawnInTetromino(this->randomGenerator.getNextTetromino());
+}
+
+void MainGameScreen::spawnInTetromino(Tetromino* tetromino) {
+    this->currentTetromino = tetromino;
     this->tetrominoes.setLocationToSpawningLocation(
         &(this->board),
-        this->cur,
+        this->currentTetromino,
         this->currentTetrominoLocation
     );
+}
+
+void MainGameScreen::hold() {
+    if (!this->hasHeld) {
+        if (this->heldTetromino) {
+            Tetromino* nextHeldTetromino = this->currentTetromino;
+            this->spawnInTetromino(this->heldTetromino);
+            this->heldTetromino = nextHeldTetromino;
+        } else {
+            this->heldTetromino = this->currentTetromino;
+            this->spawnInTetromino(this->randomGenerator.getNextTetromino());
+        }
+    }
+    this->hasHeld = true;
 }
 
 void MainGameScreen::update(float dt) {
@@ -37,38 +54,38 @@ void MainGameScreen::update(float dt) {
 
 void MainGameScreen::draw(float alpha) {
     this->board.drawBoard(this->game->getRenderer(), this->boardOffset);
-    this->drawTetromino(this->cur, this->currentTetrominoLocation);
+    this->drawTetromino(this->currentTetromino, this->currentTetrominoLocation);
 }
 
 void MainGameScreen::handleKeypress(SDL_Keycode keycode) {
     SDL_Point offset;
     switch(keycode) {
         case SDLK_SPACE:
-
+            this->hold();
             break;
         case SDLK_LEFT:
             offset.x = -1;
             offset.y = 0;
-            TetrominoOperations::tryMove(this->board, *(this->cur), this->currentTetrominoLocation, offset);
+            TetrominoOperations::tryMove(this->board, *(this->currentTetromino), this->currentTetrominoLocation, offset);
             break;
         case SDLK_RIGHT:
             offset.x = 1;
             offset.y = 0;
-            TetrominoOperations::tryMove(this->board, *(this->cur), this->currentTetrominoLocation, offset);
+            TetrominoOperations::tryMove(this->board, *(this->currentTetromino), this->currentTetrominoLocation, offset);
             break;
         case SDLK_z:
-            TetrominoOperations::tryRotate(this->board, *(this->cur), this->currentTetrominoLocation, false);
+            TetrominoOperations::tryRotate(this->board, *(this->currentTetromino), this->currentTetrominoLocation, false);
             break;
         case SDLK_x:
-            TetrominoOperations::tryRotate(this->board, *(this->cur), this->currentTetrominoLocation, true);
+            TetrominoOperations::tryRotate(this->board, *(this->currentTetromino), this->currentTetrominoLocation, true);
             break;
         case SDLK_UP:
-            if (TetrominoOperations::hardDrop(this->board, *(this->cur), this->currentTetrominoLocation)) {
+            if (TetrominoOperations::hardDrop(this->board, *(this->currentTetromino), this->currentTetrominoLocation)) {
                 this->getNextTetromino();
             }
             break;
         case SDLK_DOWN:
-            if (TetrominoOperations::softDrop(this->board, *(this->cur), this->currentTetrominoLocation)) {
+            if (TetrominoOperations::softDrop(this->board, *(this->currentTetromino), this->currentTetrominoLocation)) {
                 this->getNextTetromino();
             }
             break;

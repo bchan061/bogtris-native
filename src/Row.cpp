@@ -25,11 +25,18 @@ void Row::setWidth(int newWidth) {
 }
 
 bool Row::isFull() {
-
+    for (std::vector<Block>::iterator it = this->blocks.begin(); it != this->blocks.end(); it++) {
+        if (!((*it).isActive())) {
+            return false;
+        }
+    }
+    return true;
 }
 
 void Row::reset() {
-
+    for (std::vector<Block>::iterator it = this->blocks.begin(); it != this->blocks.end(); it++) {
+        (*it).reset();
+    }
 }
 
 Row::~Row() {

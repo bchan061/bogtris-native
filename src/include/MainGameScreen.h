@@ -16,7 +16,9 @@ class MainGameScreen : public Screen {
         SDL_Point boardOffset;
         SDL_Point currentTetrominoLocation;
 
-        Tetromino* cur;
+        Tetromino* currentTetromino;
+        Tetromino* heldTetromino;
+        bool hasHeld;
 
         RandomGenerator randomGenerator;
         
@@ -30,6 +32,16 @@ class MainGameScreen : public Screen {
          * Gets the next tetromino.
          */
         void getNextTetromino();
+
+        /**
+         * Spawns in a tetromino at the top.
+         */
+        void spawnInTetromino(Tetromino* tetromino);
+
+        /**
+         * Holds the current tetromino.
+         */
+        void hold();
     public:
         MainGameScreen(Game* currentGame);
         void update(float dt) override;
