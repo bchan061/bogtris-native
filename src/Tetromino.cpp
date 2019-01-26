@@ -13,6 +13,7 @@ Tetromino::Tetromino() {
     this->rotationBoxes.push_back(original);
 
     this->generateRotationBoxes();
+    this->generateOffsets();
 }
 
 Tetromino::Tetromino(std::string newName, uint32_t newColor, bool* newShape, int newShapeSize) {
@@ -29,6 +30,7 @@ Tetromino::Tetromino(std::string newName, uint32_t newColor, bool* newShape, int
     this->rotationBoxes.push_back(original);
 
     this->generateRotationBoxes();
+    this->generateOffsets();
 }
 
 int Tetromino::get1DIndexFrom2DIndex(int x, int y, int width) {
@@ -44,16 +46,16 @@ void Tetromino::generateRotationBoxes() {
     /* First shape: the original shape. Should already be added. */
 
     /* For convenience */
-    std::vector<bool>* originalShape = &(this->rotationBoxes.at(0));
+    std::vector<bool> originalShape = this->rotationBoxes.at(0);
 
     /* Second shape: the rotated-right shape */
     std::vector<bool> newShape;
     newShape.resize(this->shapeSize * this->shapeSize);
     for (int y = 0; y < this->shapeSize; y++) {
         for (int x = 0; x < this->shapeSize; x++) {
-            int index = get1DIndexFrom2DIndex(x, y, this->shapeSize);
-            int oldIndex = get1DIndexFrom2DIndex(y, this->shapeSize - 1 - x, this->shapeSize);
-            newShape[index] = originalShape->at(oldIndex);
+            int index = Tetromino::get1DIndexFrom2DIndex(x, y, this->shapeSize);
+            int oldIndex = Tetromino::get1DIndexFrom2DIndex(y, this->shapeSize - 1 - x, this->shapeSize);
+            newShape[index] = originalShape.at(oldIndex);
         }
     }
 
@@ -64,9 +66,9 @@ void Tetromino::generateRotationBoxes() {
     newShape2.resize(this->shapeSize * this->shapeSize);
     for (int y = 0; y < this->shapeSize; y++) {
         for (int x = 0; x < this->shapeSize; x++) {
-            int index = get1DIndexFrom2DIndex(x, y, this->shapeSize);
-            int oldIndex = get1DIndexFrom2DIndex(this->shapeSize - 1 - x, this->shapeSize - 1 - y, this->shapeSize);
-            newShape2[index] = originalShape->at(oldIndex);
+            int index = Tetromino::get1DIndexFrom2DIndex(x, y, this->shapeSize);
+            int oldIndex = Tetromino::get1DIndexFrom2DIndex(this->shapeSize - 1 - x, this->shapeSize - 1 - y, this->shapeSize);
+            newShape2[index] = originalShape.at(oldIndex);
         }
     }
     this->rotationBoxes.push_back(newShape2);
@@ -76,13 +78,27 @@ void Tetromino::generateRotationBoxes() {
     newShape3.resize(this->shapeSize * this->shapeSize);
     for (int y = 0; y < this->shapeSize; y++) {
         for (int x = 0; x < this->shapeSize; x++) {
-            int index = get1DIndexFrom2DIndex(x, y, this->shapeSize);
-            int oldIndex = get1DIndexFrom2DIndex(this->shapeSize - 1 - y, x, this->shapeSize);
-            newShape3[index] = originalShape->at(oldIndex);
-            
+            int index = Tetromino::get1DIndexFrom2DIndex(x, y, this->shapeSize);
+            int oldIndex = Tetromino::get1DIndexFrom2DIndex(this->shapeSize - 1 - y, x, this->shapeSize);
+            newShape3[index] = originalShape.at(oldIndex);
         }
     }
     this->rotationBoxes.push_back(newShape3);
+}
+
+void Tetromino::generateOffsets() {
+    /*
+     * These offsets are assuming that as y points up.
+     * We'll need to flip the y-values later.
+     */
+    this->offsets = std::vector<std::vector<std::vector<int>>> {
+        {
+            { {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0} },
+            { {0, 0}, {1, 0}, {1, -1}, {0, 2}, {1, 2} },
+            { {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0} },
+            { {0, 0}, {-1, 0}, {-1, -1}, {0, 2}, {-1, 2} }
+        }
+    };
 }
 
 void Tetromino::reset() {
@@ -99,14 +115,14 @@ void Tetromino::rotateRight() {
     this->currentShapeIndex = (this->currentShapeIndex + 1) % Tetromino::AMOUNT_OF_ROTATION_BOXES;
 }
 
-std::vector<bool> Tetromino::getRotationBox() {
-    return this->rotationBoxes.at(this->currentShapeIndex);
+std::vector<bool>* Tetromino::getRotationBox() {
+    return &(this->rotationBoxes.at(this->currentShapeIndex));
 }
 
 void Tetromino::logBox() {
-    std::vector<bool> currentRotationBox = this->getRotationBox();
+    std::vector<bool>* currentRotationBox = this->getRotationBox();
     for (int i = 0; i < this->shapeSize * this->shapeSize; i++) {
-        std::cout << currentRotationBox.at(i);
+        std::cout << currentRotationBox->at(i);
         if ((i + 1) % this->shapeSize == 0) {
             std::cout << std::endl;
         }

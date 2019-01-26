@@ -42,6 +42,16 @@ class Row {
         Block* getBlock(int x);
 
         /**
+         * Returns if the row is completely occupied.
+         */
+        bool isFull();
+
+        /**
+         * Resets the row to all non-active blocks.
+         */
+        void reset();
+
+        /**
          * Destroys the row.
          */
         ~Row();

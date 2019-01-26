@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include "Row.h"
 #include "Block.h"
+#include "Tetromino.h"
 
 #include <vector>
 
@@ -40,10 +41,9 @@ class Board {
         /**
          * Debug draws the board.
          * @param renderer the SDL_Renderer to use
-         * @param offsetX the offset x-coordinate of the board
-         * @param offsetY the offset y-coordinate of the board
+         * @param offset the offset relative to the top-left
          */
-        void drawBoard(SDL_Renderer* renderer, int offsetX, int offsetY);
+        void drawBoard(SDL_Renderer* renderer, SDL_Point offset);
 
         /**
          * Returns the size of a block in pixels.
@@ -64,6 +64,16 @@ class Board {
          * Returns the amount of rows that are hidden at the top.
          */
         int getObscuredTop() { return this->hiddenTop; }
+
+        /**
+         * Determines if a tetromino collides with any block (or wall) in the board.
+         */
+        bool tetrominoCollides(Tetromino& tetromino, SDL_Point& location);
+
+        /**
+         * Renders a tetromino onto the board.
+         */
+        void renderTetromino(Tetromino& tetromino, SDL_Point& location);
 
         /**
          * Destroys the board.

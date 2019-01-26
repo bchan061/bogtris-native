@@ -5,6 +5,7 @@
 #include "Board.h"
 #include "Tetromino.h"
 #include "Tetrominoes.h"
+#include "TetrominoOperations.h"
 #include "RandomGenerator.h"
 
 class MainGameScreen : public Screen {
@@ -12,6 +13,7 @@ class MainGameScreen : public Screen {
         Board board;
         Tetrominoes tetrominoes;
 
+        SDL_Point boardOffset;
         SDL_Point currentTetrominoLocation;
 
         Tetromino* cur;
@@ -22,7 +24,12 @@ class MainGameScreen : public Screen {
          * Draws a tetromino.
          * For debugging.
          */
-        void drawTetromino(Tetromino* tetromino, int offsetX, int offsetY);
+        void drawTetromino(Tetromino* tetromino, SDL_Point& position);
+
+        /**
+         * Gets the next tetromino.
+         */
+        void getNextTetromino();
     public:
         MainGameScreen(Game* currentGame);
         void update(float dt) override;

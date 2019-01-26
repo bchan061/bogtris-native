@@ -8,6 +8,7 @@ class Block {
         uint8_t r;
         uint8_t g;
         uint8_t b;
+        bool active;
     public:
         /* Initializes a black, inactive block. */
         Block();
@@ -53,6 +54,11 @@ class Block {
          * @param color a 24-bit color representing the color (0xRRGGBB)
          */
         void set(uint32_t newColor);
+
+        /**
+         * Returns if the block is occupied or not.
+         */
+        bool isActive() { return this->active; }
 };
 
 #endif

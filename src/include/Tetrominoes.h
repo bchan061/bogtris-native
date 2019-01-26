@@ -2,7 +2,8 @@
 #define TETROMINOES_H
 
 #include "Tetromino.h"
-
+#include "Board.h"
+#include <SDL2/SDL.h>
 #include <vector>
 
 class Tetrominoes {
@@ -25,6 +26,14 @@ class Tetrominoes {
          * Organized into a vector.
          */
         std::vector<Tetromino>* getAllTetrominoes() { return &this->tetrominoArray; }
+
+        /**
+         * Sets the point specified to the appropriate spawning location.
+         * @param board a pointer to a board
+         * @param tetromino a pointer to a tetromino
+         * @param point a pointer to a point
+         */
+        void setLocationToSpawningLocation(Board* board, Tetromino* tetromino, SDL_Point& point);
 
         /**
          * Destroys the tetrominoes.

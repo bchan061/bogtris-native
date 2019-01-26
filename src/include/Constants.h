@@ -19,6 +19,11 @@ namespace Constants {
         uint32_t const RED = 0xFF0000;
         uint32_t const GRAY = 0x999999;
     }
+
+    namespace Timings {
+        float const DAS = 0.2f;
+        float const ARR = 0.033f;
+    }
 }
 
 #endif

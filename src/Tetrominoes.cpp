@@ -1,6 +1,8 @@
 #include "include/Tetrominoes.h"
 #include "include/Constants.h"
 
+#include <math.h>
+
 Tetrominoes::Tetrominoes() {
     this->tetrominoArray.reserve(Tetrominoes::NUMBER_OF_TETROMINOES);
 
@@ -58,6 +60,14 @@ Tetrominoes::Tetrominoes() {
 
 void Tetrominoes::createTetromino(std::string name, uint32_t color, bool* shape, int shapeSize) {
     this->tetrominoArray.push_back(Tetromino(name, color, shape, shapeSize));
+}
+
+void Tetrominoes::setLocationToSpawningLocation(Board* board, Tetromino* tetromino, SDL_Point& point) {
+    int middle = (board->getBoardWidth() / 2);
+    int start = middle - (int) ceil(tetromino->getShapeSize() / 2.0f);
+
+    point.x = start;
+    point.y = board->getObscuredTop() - 1;
 }
 
 Tetrominoes::~Tetrominoes() {

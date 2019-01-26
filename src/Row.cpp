@@ -24,6 +24,14 @@ void Row::setWidth(int newWidth) {
     }
 }
 
+bool Row::isFull() {
+
+}
+
+void Row::reset() {
+
+}
+
 Row::~Row() {
     
 }
