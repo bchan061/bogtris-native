@@ -8,6 +8,8 @@
 #include "TetrominoOperations.h"
 #include "RandomGenerator.h"
 
+#include "Timer.h"
+
 class MainGameScreen : public Screen {
     private:
         Board board;
@@ -15,6 +17,11 @@ class MainGameScreen : public Screen {
 
         SDL_Point boardOffset;
         SDL_Point currentTetrominoLocation;
+
+        Timer perpetualDropTimer;
+        Timer softDropTimer;
+        Timer dasLeftTimer;
+        Timer dasRightTimer;
 
         Tetromino* currentTetromino;
         Tetromino* heldTetromino;
@@ -39,9 +46,41 @@ class MainGameScreen : public Screen {
         void spawnInTetromino(Tetromino* tetromino);
 
         /**
+         * Perpetually drops the tetromino.
+         */
+        void perpetualDrop();
+
+        /**
+         * DAS movement to the left.
+         */
+        void dasLeft();
+
+        /**
+         * DAS movement to the right.
+         */
+        void dasRight();
+
+        /**
+         * Soft drop the tetromino.
+         */
+        void softDrop();
+
+        /**
          * Holds the current tetromino.
          */
         void hold();
+
+        /**
+         * Handles keyboard state for any held keys.
+         */
+        void handleKeystate();
+
+        /**
+         * Renders the ghost pieces of the tetromino.
+         */
+        void renderGhostPieces(Tetromino* tetromino, SDL_Point& position);
+
+        
     public:
         MainGameScreen(Game* currentGame);
         void update(float dt) override;

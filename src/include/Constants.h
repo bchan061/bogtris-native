@@ -21,8 +21,8 @@ namespace Constants {
     }
 
     namespace Timings {
-        float const DAS = 0.2f;
-        float const ARR = 0.033f;
+        float const DAS = 0.4f;
+        float const ARR = 0.066f;
     }
 }
 

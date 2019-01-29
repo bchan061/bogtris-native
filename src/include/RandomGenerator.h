@@ -11,7 +11,7 @@ class RandomGenerator {
 
         unsigned int nextQueueLength;
 
-        std::queue<Tetromino*> next;
+        std::deque<Tetromino*> next;
         std::queue<Tetromino*> bag;
     public:
         /**
@@ -51,6 +51,11 @@ class RandomGenerator {
          * Pop the next tetromino from the queue.
          */
         Tetromino* getNextTetromino();
+
+        /**
+         * Returns the deque containing the next tetrominoes.
+         */
+        std::deque<Tetromino*>* getNextTetrominoes();
 };
 
 #endif

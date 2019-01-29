@@ -38,7 +38,7 @@ void RandomGenerator::fillQueueWithBag() {
 
         Tetromino* bagTetromino = this->bag.front();
         this->bag.pop();
-        this->next.push(bagTetromino);
+        this->next.push_back(bagTetromino);
     }
 }
 
@@ -48,9 +48,13 @@ Tetromino* RandomGenerator::getNextTetromino() {
     }
     
     Tetromino* nextTetrominoPtr = this->next.front();
-    this->next.pop();
+    this->next.pop_front();
 
     this->fillQueueWithBag();
 
     return nextTetrominoPtr;
+}
+
+std::deque<Tetromino*>* RandomGenerator::getNextTetrominoes() {
+    return &(this->next);
 }

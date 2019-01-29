@@ -18,7 +18,6 @@ bool TetrominoOperations::softDrop(Board& board, Tetromino& tetromino, SDL_Point
     offset.x = 0;
     offset.y = 1;
     if (!TetrominoOperations::tryMove(board, tetromino, currentLocation, offset)) {
-        board.renderTetromino(tetromino, currentLocation);
         return true;
     }
     return false;

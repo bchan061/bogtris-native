@@ -13,6 +13,7 @@ class TetrominoOperations {
 
         /**
          * Hard drops the tetromino.
+         * Forces the board to render the tetromino.
          */
         static bool hardDrop(Board& board, Tetromino& tetromino, SDL_Point& currentLocation);
 

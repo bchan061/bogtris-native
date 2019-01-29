@@ -22,7 +22,7 @@ void Game::update(uint32_t currentTick) {
             this->currentScreen->update(Constants::SECONDS_PER_FRAME);
             this->currentScreen->draw(0.0f);
 
-            int timeToWait = (Constants::SECONDS_PER_FRAME * 1000 - elapsedTick);
+            int timeToWait = (int)(Constants::SECONDS_PER_FRAME * 1000.0f - elapsedTick);
             if (timeToWait < 0) {
                 timeToWait = 0;
             }
