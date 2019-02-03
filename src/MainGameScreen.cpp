@@ -14,7 +14,7 @@ MainGameScreen::MainGameScreen(Game* currentGame) :
         Constants::SCREEN_HEIGHT / 2 -
             ((this->board.getBoardHeight() - this->board.getObscuredTop()) * this->board.getBlockSize()) / 2
     };
-    this->heldTetromino = NULL;
+    this->heldTetromino = nullptr;
 
     this->perpetualDropTimer = Timer(std::bind(&MainGameScreen::perpetualDrop, this), 2.0f);
     this->softDropTimer = Timer(std::bind(&MainGameScreen::softDrop, this), Constants::SECONDS_PER_FRAME * 2);
@@ -84,24 +84,44 @@ void MainGameScreen::update(float dt) {
 
 void MainGameScreen::draw(float alpha) {
     this->board.drawBoard(this->game->getRenderer(), this->boardOffset);
-    this->renderGhostPieces(this->currentTetromino, this->currentTetrominoLocation);
+
+    this->drawNextPieces();
+    this->drawHeldTetromino();
+
+    this->drawGhostPieces(this->currentTetromino, this->currentTetrominoLocation);
     this->drawTetromino(this->currentTetromino, this->currentTetrominoLocation);
 }
 
 void MainGameScreen::handleKeystate() {
-    const uint8_t* keystate = SDL_GetKeyboardState(NULL);
-    if (keystate[SDL_SCANCODE_LEFT]) {
+    const uint8_t* keystate = SDL_GetKeyboardState(nullptr);
+
+    bool heldLeft = (bool) keystate[SDL_SCANCODE_LEFT];
+    bool heldRight = (bool) keystate[SDL_SCANCODE_RIGHT];
+
+    if (heldLeft && heldRight) {
+        /* Which counter was most recently pressed? */
+        if (this->dasingRight) {
+            this->dasLeftTimer.deactivate();
+            this->dasRightTimer.activate();
+        } else {
+            this->dasLeftTimer.activate();
+            this->dasRightTimer.deactivate();
+        }
+    } else if (heldLeft) {
+        this->dasRightTimer.deactivate();
+        this->dasRightTimer.setCountdown(Constants::Timings::DAS);
         this->dasLeftTimer.activate();
+    } else if (heldRight) {
+        this->dasLeftTimer.deactivate();
+        this->dasLeftTimer.setCountdown(Constants::Timings::DAS);
+        this->dasRightTimer.activate();
     } else {
         this->dasLeftTimer.deactivate();
         this->dasLeftTimer.setCountdown(Constants::Timings::DAS);
-    }
-    if (keystate[SDL_SCANCODE_RIGHT]) {
-        this->dasRightTimer.activate();
-    } else {
         this->dasRightTimer.deactivate();
         this->dasRightTimer.setCountdown(Constants::Timings::DAS);
     }
+
     if (keystate[SDL_SCANCODE_DOWN]) {
         this->softDropTimer.activate();
     } else {
@@ -119,11 +139,13 @@ void MainGameScreen::handleKeypress(SDL_Keycode keycode) {
         case SDLK_LEFT:
             offset.x = -1;
             offset.y = 0;
+            this->dasingRight = false;
             TetrominoOperations::tryMove(this->board, *(this->currentTetromino), this->currentTetrominoLocation, offset);
             break;
         case SDLK_RIGHT:
             offset.x = 1;
             offset.y = 0;
+            this->dasingRight = true;
             TetrominoOperations::tryMove(this->board, *(this->currentTetromino), this->currentTetrominoLocation, offset);
             break;
         case SDLK_z:
@@ -175,7 +197,34 @@ void MainGameScreen::drawTetromino(Tetromino* tetromino, SDL_Point& position) {
     }
 }
 
-void MainGameScreen::renderGhostPieces(Tetromino* tetromino, SDL_Point& position) {
+void MainGameScreen::drawTetrominoAt(Tetromino *tetromino, SDL_Point &position, uint8_t alpha) {
+    SDL_Renderer* renderer = this->getGame()->getRenderer();
+    SDL_Rect rect;
+    rect.w = this->board.getBlockSize();
+    rect.h = this->board.getBlockSize();
+
+    uint32_t color = tetromino->getColor();
+    uint8_t r = (color >> 16) & 0xFF;
+    uint8_t g = (color >> 8) & 0xFF;
+    uint8_t b = (color) & 0xFF;
+
+    std::vector<bool>* rotationBox = tetromino->getOriginalRotationBox();
+    for (int i = 0; i < tetromino->getShapeSize() * tetromino->getShapeSize(); i++) {
+        if (rotationBox->at(i)) {
+            int x = i % tetromino->getShapeSize();
+            int y = i / tetromino->getShapeSize();
+            rect.x = position.x + x * this->board.getBlockSize();
+            rect.y = position.y + y * this->board.getBlockSize();
+
+            SDL_SetRenderDrawBlendMode(this->game->getRenderer(), SDL_BLENDMODE_BLEND);
+
+            SDL_SetRenderDrawColor(renderer, r, g, b, alpha);
+            SDL_RenderFillRect(renderer, &rect);
+        }
+    }
+}
+
+void MainGameScreen::drawGhostPieces(Tetromino *tetromino, SDL_Point &position) {
     SDL_Renderer* renderer = this->getGame()->getRenderer();
     SDL_Rect rect;
     rect.w = this->board.getBlockSize();
@@ -204,7 +253,7 @@ void MainGameScreen::renderGhostPieces(Tetromino* tetromino, SDL_Point& position
     int pixelRelativeY = this->boardOffset.y + finalPoint.y * this->board.getBlockSize();
 
     std::vector<bool>* rotationBox = tetromino->getRotationBox();
-    for (int i = 0; i < tetromino->getShapeSize() * tetromino->getShapeSize(); i++) {
+    for (unsigned int i = 0; i < tetromino->getShapeSize() * tetromino->getShapeSize(); i++) {
         if (rotationBox->at(i)) {
             int x = i % tetromino->getShapeSize();
             int y = i / tetromino->getShapeSize();
@@ -216,6 +265,34 @@ void MainGameScreen::renderGhostPieces(Tetromino* tetromino, SDL_Point& position
             SDL_SetRenderDrawColor(renderer, r, g, b, 0x44);
             SDL_RenderFillRect(renderer, &rect);
         }
+    }
+}
+
+void MainGameScreen::drawNextPieces() {
+    int y = this->boardOffset.y;
+    for (unsigned int i = 0; i < 5; i++) {
+        Tetromino* tetromino = this->randomGenerator.getNextTetrominoes()->at(i);
+        SDL_Point pos = {
+            this->boardOffset.x + this->board.getBoardWidth() * this->board.getBlockSize() + 50,
+            y
+        };
+        if (i == 0) {
+            this->drawTetrominoAt(tetromino, pos, 0xCC);
+            y += (int) (this->board.getBlockSize() * 6.5f);
+        } else {
+            this->drawTetrominoAt(tetromino, pos, 0x77);
+            y += (int) (this->board.getBlockSize() * 3.25f);
+        }
+    }
+}
+
+void MainGameScreen::drawHeldTetromino() {
+    if (this->heldTetromino) {
+        SDL_Point pos = {
+            this->boardOffset.x - this->board.getBlockSize() * 4,
+            this->boardOffset.y - (int) (this->board.getBlockSize() * 0.5f)
+        };
+        this->drawTetrominoAt(this->heldTetromino, pos, 0xFF);
     }
 }
 

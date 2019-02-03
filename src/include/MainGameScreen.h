@@ -20,6 +20,11 @@ class MainGameScreen : public Screen {
 
         Timer perpetualDropTimer;
         Timer softDropTimer;
+
+        /**
+         * Keep track of which DAS charged was most recently charged
+         */
+        bool dasingRight;
         Timer dasLeftTimer;
         Timer dasRightTimer;
 
@@ -30,10 +35,20 @@ class MainGameScreen : public Screen {
         RandomGenerator randomGenerator;
         
         /**
-         * Draws a tetromino.
-         * For debugging.
+         * Draws a tetromino at a block position.
          */
         void drawTetromino(Tetromino* tetromino, SDL_Point& position);
+
+        /**
+         * Draws a tetromino at a pixel position.
+         * Slightly faded.
+         */
+        void drawTetrominoAt(Tetromino *tetromino, SDL_Point &position, uint8_t alpha);
+
+        /**
+         * Draws the held tetromino, if it exists.
+         */
+        void drawHeldTetromino();
 
         /**
          * Gets the next tetromino.
@@ -78,9 +93,12 @@ class MainGameScreen : public Screen {
         /**
          * Renders the ghost pieces of the tetromino.
          */
-        void renderGhostPieces(Tetromino* tetromino, SDL_Point& position);
+        void drawGhostPieces(Tetromino* tetromino, SDL_Point &position);
 
-        
+        /**
+         * Draws the next pieces of the queue.
+         */
+        void drawNextPieces();
     public:
         MainGameScreen(Game* currentGame);
         void update(float dt) override;

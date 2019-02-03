@@ -119,6 +119,10 @@ std::vector<bool>* Tetromino::getRotationBox() {
     return &(this->rotationBoxes.at(this->currentShapeIndex));
 }
 
+std::vector<bool>* Tetromino::getOriginalRotationBox() {
+    return &(this->rotationBoxes.at(0));
+}
+
 void Tetromino::logBox() {
     std::vector<bool>* currentRotationBox = this->getRotationBox();
     for (int i = 0; i < this->shapeSize * this->shapeSize; i++) {

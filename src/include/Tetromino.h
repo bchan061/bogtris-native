@@ -68,6 +68,12 @@ class Tetromino {
         std::vector<bool>* getRotationBox();
 
         /**
+         * Returns the default rotation box.
+         * @return the default rotation box
+         */
+        std::vector<bool>* getOriginalRotationBox();
+
+        /**
          * Returns the name of the tetromino.
          */
         std::string* getName() { return &(this->name); }
