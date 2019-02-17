@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <ctime>
 
 int main(int argc, char* args[]) {
     /* Set the seed for random. */

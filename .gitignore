@@ -1,2 +1,15 @@
 # Exclude object files
 obj/*
+
+# Visual Studio files and directories
+*.user
+.vs/*
+
+# Build directories
+x64/*
+
+# Scripts
+compileAndRun.sh
+
+# SDL2 dependencies
+SDL2.dll

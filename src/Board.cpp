@@ -99,17 +99,23 @@ void Board::renderTetromino(Tetromino& tetromino, SDL_Point& location) {
 int Board::checkLineClears() {
     int amount = 0;
     
-    for (std::vector<Row>::iterator it = this->rowVector.begin(); it != this->rowVector.end(); it++) {
+	std::vector<Row> rowsToAdd;
+	
+	std::vector<Row>::iterator it = this->rowVector.begin();
+    while (it != this->rowVector.end()) {
         Row row = *it;
         if (row.isFull()) {
-
             /* Erase the row, reset it, and push it back to the top. */
-            this->rowVector.erase(it);
+            it = this->rowVector.erase(it);
             row.reset();
-            this->rowVector.insert(this->rowVector.begin(), row);
+            rowsToAdd.push_back(row);
             amount += 1;
-        }
+		} else {
+			it++;
+		}
     }
+
+	this->rowVector.insert(this->rowVector.begin(), rowsToAdd.begin(), rowsToAdd.end());
     return amount;
 }
 
