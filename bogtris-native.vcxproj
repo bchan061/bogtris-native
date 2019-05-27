@@ -129,6 +129,7 @@
     <ClCompile Include="src\Board.cpp" />
     <ClCompile Include="src\Bogtris.cpp" />
     <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\ITetromino.cpp" />
     <ClCompile Include="src\MainGameScreen.cpp" />
     <ClCompile Include="src\RandomGenerator.cpp" />
     <ClCompile Include="src\Row.cpp" />
@@ -145,6 +146,7 @@
     <ClInclude Include="src\include\Bogtris.h" />
     <ClInclude Include="src\include\Constants.h" />
     <ClInclude Include="src\include\Game.h" />
+    <ClInclude Include="src\include\ITetromino.h" />
     <ClInclude Include="src\include\MainGameScreen.h" />
     <ClInclude Include="src\include\RandomGenerator.h" />
     <ClInclude Include="src\include\Row.h" />

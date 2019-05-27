@@ -7,10 +7,7 @@ RandomGenerator::RandomGenerator() {
 }
 
 void RandomGenerator::initWithTetrominoes(Tetrominoes* tetrominoes) {
-    std::vector<Tetromino>* vec = tetrominoes->getAllTetrominoes();
-    for(std::vector<Tetromino>::iterator it = vec->begin(); it != vec->end(); it++) {
-        this->tetrominoVector.push_back(&(*it));
-    }
+	this->tetrominoVector = tetrominoes->getAllTetrominoes();
 
     this->fillQueueWithBag();
 }

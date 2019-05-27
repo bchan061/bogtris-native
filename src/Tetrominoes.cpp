@@ -6,14 +6,7 @@
 Tetrominoes::Tetrominoes() {
     this->tetrominoArray.reserve(Tetrominoes::NUMBER_OF_TETROMINOES);
 
-    // TODO: remove to accomodate I-spins
-    bool iBox[] = {
-        0, 0, 0, 0,
-        1, 1, 1, 1,
-        0, 0, 0, 0,
-        0, 0, 0, 0
-    };
-    this->createTetromino("I", Constants::Colors::CYAN, iBox, 4);
+	this->createITetromino();
 
     // TODO: remove to accomodate T-spins
     bool tBox[] = {
@@ -59,8 +52,22 @@ Tetrominoes::Tetrominoes() {
 }
 
 void Tetrominoes::createTetromino(std::string name, uint32_t color, bool* shape, int shapeSize) {
-    this->tetrominoArray.push_back(Tetromino(name, color, shape, shapeSize));
+    this->tetrominoArray.push_back(new Tetromino(name, color, shape, shapeSize));
 }
+
+void Tetrominoes::createITetromino() {
+	// TODO: remove to accomodate I-spins
+	bool iBox[] = {
+		0, 0, 0, 0,
+		1, 1, 1, 1,
+		0, 0, 0, 0,
+		0, 0, 0, 0
+	};
+	this->tetrominoArray.push_back(
+		new ITetromino(iBox)
+	);
+}
+
 
 void Tetrominoes::setLocationToSpawningLocation(Board* board, Tetromino* tetromino, SDL_Point& point) {
     int middle = (board->getBoardWidth() / 2);
@@ -71,5 +78,7 @@ void Tetrominoes::setLocationToSpawningLocation(Board* board, Tetromino* tetromi
 }
 
 Tetrominoes::~Tetrominoes() {
-    
+	for (Tetromino* tetrominoPtr : this->tetrominoArray) {
+		delete tetrominoPtr;
+	}
 }

@@ -16,7 +16,7 @@ MainGameScreen::MainGameScreen(Game* currentGame) :
     };
     this->heldTetromino = nullptr;
 
-    this->perpetualDropTimer = Timer(std::bind(&MainGameScreen::perpetualDrop, this), 2.0f);
+    this->perpetualDropTimer = Timer(std::bind(&MainGameScreen::perpetualDrop, this), Constants::Timings::PERPETUAL_DROP);
     this->softDropTimer = Timer(std::bind(&MainGameScreen::softDrop, this), Constants::SECONDS_PER_FRAME * 2);
     this->dasLeftTimer = Timer(std::bind(&MainGameScreen::dasLeft, this), Constants::Timings::ARR);
     this->dasRightTimer = Timer(std::bind(&MainGameScreen::dasRight, this), Constants::Timings::ARR);

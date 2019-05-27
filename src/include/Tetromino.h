@@ -16,7 +16,7 @@ class Tetromino {
 
         /* This is a vector holding a 1D array of the shape */
         std::vector<std::vector<bool>> rotationBoxes;
-
+	protected:
         /* Vector holding an array of points (defined as arrays) */
         std::vector<std::vector<std::vector<int>>> offsets;
     public:
@@ -45,7 +45,7 @@ class Tetromino {
         /**
          * Generates offsets for each of the four rotations.
          */
-        void generateOffsets();
+        virtual void generateOffsets();
 
         /**
          * Resets the tetromino to its default rotation.

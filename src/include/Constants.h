@@ -23,6 +23,8 @@ namespace Constants {
     namespace Timings {
         float const DAS = 0.4f;
         float const ARR = 0.066f;
+
+		float const PERPETUAL_DROP = 0.5f;
     }
 }
 
